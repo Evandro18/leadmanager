@@ -23,7 +23,7 @@ export const Header = (props) => {
   const { classes } = props
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="static" className={classes.appBar} color='primary'>
         <IconButton className={classes.menuButton} color='inherit' aria-label="menu">
           <Menu open={false}></Menu>
         </IconButton>
