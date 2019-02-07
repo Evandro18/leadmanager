@@ -10,12 +10,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   <script src="main.js"></script>
 </head>
-<div id='app'></div>
-{% load static %}
-<script src="{% static "frontend/main.js" %}"></script>
-
-<body>
-
+<body style='margin: 0;'>
+  <div id='app' class='content'></div>
+  {% load static %}
+  <script src="{% static "frontend/main.js" %}"></script>
 </body>
 
 </html>

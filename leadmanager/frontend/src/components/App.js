@@ -1,14 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import Grid from '@material-ui/core/Grid'
-import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles'
+import Header from './layout/Header'
+import Dashboard from './leads/Dashboard'
 
-class App extends Component {
-  render () {
-    return <Grid container>
-      <Typography variant='h1'>Hello Python World</Typography>
-    </Grid>
+const styles = {
+  container: {
+    padding: '1%'
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+class App extends Component {
+  render () {
+    const { classes } = this.props
+    return <Fragment>
+      <Header />
+      <Grid container className={classes.container}>
+        <Dashboard />
+      </Grid>
+    </Fragment>
+  }
+}
+
+export const ContentApp = withStyles(styles)(App)
+
+ReactDOM.render(<ContentApp />, document.getElementById('app'));
