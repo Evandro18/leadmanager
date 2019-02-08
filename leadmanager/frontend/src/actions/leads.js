@@ -1,4 +1,4 @@
-import { GET_LEADS, DELETE_LEADS } from './types'
+import { GET_LEADS, DELETE_LEADS, CREATE_LEADS, SET_EDIT_LEAD, UPDATE_LEAD } from './types'
 import LeadsApi from '../apis/leads'
 
 //GET LEADS
@@ -21,4 +21,35 @@ export const deleteLeads = (id) => dispatch => {
       })
     })
     .catch(err => console.log(err)/* dispatch error */)
+}
+
+//CREATE LEADS
+export const createLead = (lead) => dispatch => {
+  LeadsApi.createLead(lead)
+    .then(res => {
+      dispatch({
+        type: CREATE_LEADS,
+        payload: lead
+      })
+    })
+    .catch(err => console.log(err)/* dispatch error */)
+}
+
+//SET EDIT LEAD
+export const setEditLead = (lead) => dispatch => {
+  dispatch({
+    type: SET_EDIT_LEAD,
+    payload: lead
+  })
+}
+
+//UPDATE LEAD
+export const updateLead = (lead) => dispatch => {
+  LeadsApi.updateLead(lead)
+    .then(res =>
+      dispatch({
+        type: UPDATE_LEAD,
+        payload: res.data
+      }))
+    .catch(err => console.log(err))
 }

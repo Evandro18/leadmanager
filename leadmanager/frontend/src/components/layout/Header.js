@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import { IconButton, Menu, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
+import InputBase from '@material-ui/core/InputBase'
 
 const styles = {
   root: {
     flexGrow: 1,
+    marginRight: -10
   },
   grow: {
     flexGrow: 1,
@@ -15,7 +17,8 @@ const styles = {
     marginRight: 20,
   },
   appBar: {
-    padding: '1%'
+    padding: '1%',
+    textAlign: (window.innerWidth <= 800) ? 'center' : 'left'
   }
 };
 
@@ -27,7 +30,7 @@ export const Header = (props) => {
         <IconButton className={classes.menuButton} color='inherit' aria-label="menu">
           <Menu open={false}></Menu>
         </IconButton>
-        <Typography variant="h6" color='inherit' className={classes.grow}>
+        <Typography variant="h4" color='inherit' className={classes.grow}>
           Lead Managers
         </Typography>
         {/* <Button color='inherit'></Button> */}

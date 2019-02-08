@@ -9,18 +9,33 @@ const styles = {
   }
 }
 
-function Dashboard (props) {
-  const { classes } = props
-  return (
-    <Grid container direction='row' justify='center'>
-      <Grid item className={classes.gridItem}>
-        {/* <Form /> */}
+class Dashboard extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      showForm: false
+    }
+    this.showForm = this.showForm.bind(this)
+  }
+
+  showForm () {
+    this.setState({ showForm: !this.state.showForm })
+  }
+
+  render () {
+    const { classes } = this.props
+    return (
+      <Grid container direction='row' justify='center' spacing={40} >
+        {this.state.showForm ?
+          <Grid item className={classes.gridItem}>
+            <Form showForm={this.showForm} />
+          </Grid> :
+          <Grid item className={classes.gridItem}>
+            <Leads showForm={this.showForm} />
+          </Grid>}
       </Grid>
-      <Grid item className={classes.gridItem}>
-        <Leads />
-      </Grid>
-    </Grid>
-  )
+    )
+  }
 }
 
 export default withStyles(styles)(Dashboard)

@@ -6,6 +6,12 @@ class LeadsApi {
   static deleteLeads (id) {
     return axios.delete(`/api/leads/${id}`)
   }
+  static createLead (lead) {
+    return axios.post(`/api/leads/`, { ...lead })
+  }
+  static updateLead (lead) {
+    return axios.put(`/api/leads/${lead.id}/`, { ...lead })
+  }
 }
 
 export default LeadsApi

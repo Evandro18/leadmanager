@@ -12,7 +12,7 @@ import { theme } from './layout/theme';
 
 const styles = {
   container: {
-    padding: '1%',
+    padding: '2%',
     width: '100%'
   }
 }
