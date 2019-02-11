@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { theme } from '../layout/theme';
 import { connect } from 'react-redux'
 import { createLead, setEditLead, updateLead } from '../../actions/leads'
+import { enqueueSnackbar } from '../../actions/notifications';
 
 const styles = {
   paper: {
@@ -41,13 +42,19 @@ class Form extends Component {
 
   submit = () => {
     const { id = -1, name, email, message, created_at } = this.props.lead
+    let promise
     if (id > -1) {
-      this.props.updateLead({ id, name, email, message, created_at })
-      this.props.showForm()
-      return this.props.setEditLead({ name: '', email: '', message: '', created_at: '' })
+      promise = this.props.updateLead({ id, name, email, message, created_at })
+    } else {
+      promise = this.props.createLead({ name, email, message })
     }
-    this.props.showForm()
-    this.props.createLead({ name, email, message })
+    promise.then(res => {
+      this.props.setEditLead({ name: '', email: '', message: '', created_at: '' })
+      this.props.showForm()
+      // this.props.enqueueSnackbar({ message: 'Saved with success', options: { variant: 'success' } })
+    }).catch(err => {
+      // this.props.enqueueSnackbar({ message: 'Request failed', options: { variant: 'error' } })
+    })
   }
 
   render () {
@@ -72,7 +79,15 @@ class Form extends Component {
 
 const mapStateToProps = state => ({
   leads: state.leads.leads,
-  lead: state.leads.currentLead
+  lead: state.leads.currentLead,
+  errors: state.errors
 })
 
-export default connect(mapStateToProps, { createLead, setEditLead, updateLead })(withStyles(styles)(Form))
+const mapDispatchToProps = dispatch => ({
+  createLead: async ({ name, email, message }) => dispatch(createLead({ name, email, message })),
+  updateLead: async ({ id, name, email, message, created_at }) => dispatch(updateLead({ id, name, email, message, created_at })),
+  setEditLead: async ({ name, email, message, created_at }) => dispatch(setEditLead({ name, email, message, created_at })),
+  enqueueSnackbar: async ({ ...notification }) => dispatch(enqueueSnackbar({ ...notification }))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Form))

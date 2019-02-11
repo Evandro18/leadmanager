@@ -1,38 +1,65 @@
-import { GET_LEADS, DELETE_LEADS, CREATE_LEADS, SET_EDIT_LEAD, UPDATE_LEAD } from './types'
+import { GET_LEADS, DELETE_LEADS, CREATE_LEADS, SET_EDIT_LEAD, UPDATE_LEAD, ENQUEUE_SNACKBAR } from './types'
 import LeadsApi from '../apis/leads'
 
 //GET LEADS
 export const getLeads = () => dispatch => {
-  LeadsApi.getLeads()
+  return LeadsApi.getLeads()
     .then(res => dispatch({
       type: GET_LEADS,
       payload: res.data
     }))
-    .catch(err => console.log(err)/* dispatch error */)
+    .catch(err => {
+      const errors = {
+        msg: err.response.data,
+        status: err.response.status
+      }
+      dispatch({
+        type: ENQUEUE_SNACKBAR,
+        payload: errors
+      })
+    })
 }
 
 //DELETE LEADS
 export const deleteLeads = (id) => dispatch => {
-  LeadsApi.deleteLeads(id)
-    .then(res => {
+  return LeadsApi.deleteLeads(id)
+    .then(res =>
       dispatch({
         type: DELETE_LEADS,
         payload: { id }
       })
+    )
+    .catch(err => {
+      const errors = {
+        msg: err.response.data,
+        status: err.response.status
+      }
+      dispatch({
+        type: ENQUEUE_SNACKBAR,
+        payload: errors
+      })
     })
-    .catch(err => console.log(err)/* dispatch error */)
 }
 
 //CREATE LEADS
 export const createLead = (lead) => dispatch => {
-  LeadsApi.createLead(lead)
-    .then(res => {
+  return LeadsApi.createLead(lead)
+    .then(res =>
       dispatch({
         type: CREATE_LEADS,
         payload: lead
       })
+    )
+    .catch(err => {
+      let notification = {}
+      if (err.response.status === 400) {
+        notification = {
+          msg: 'Invalid or null fields',
+          options: { variant: 'error' }
+        }
+      }
+      dispatch({ type: ENQUEUE_SNACKBAR, payload: notification })
     })
-    .catch(err => console.log(err)/* dispatch error */)
 }
 
 //SET EDIT LEAD
@@ -45,11 +72,18 @@ export const setEditLead = (lead) => dispatch => {
 
 //UPDATE LEAD
 export const updateLead = (lead) => dispatch => {
-  LeadsApi.updateLead(lead)
-    .then(res =>
-      dispatch({
-        type: UPDATE_LEAD,
-        payload: res.data
-      }))
-    .catch(err => console.log(err))
+  return LeadsApi.updateLead(lead)
+    .then(res => {
+      dispatch({ type: UPDATE_LEAD, payload: res.data })
+    })
+    .catch(err => {
+      let notification = {}
+      if (err.response.status === 400) {
+        notification = {
+          msg: 'Invalid or null fields',
+          options: { variant: 'error' }
+        }
+      }
+      dispatch({ type: ENQUEUE_SNACKBAR, payload: notification })
+    })
 }
