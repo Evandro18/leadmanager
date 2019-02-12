@@ -1,5 +1,7 @@
 import { GET_LEADS, DELETE_LEADS, CREATE_LEADS, SET_EDIT_LEAD, UPDATE_LEAD, ENQUEUE_SNACKBAR } from './types'
 import LeadsApi from '../apis/leads'
+import store from '../store'
+import { enqueueSnackbar } from './notifications';
 
 //GET LEADS
 export const getLeads = () => dispatch => {
@@ -54,11 +56,11 @@ export const createLead = (lead) => dispatch => {
       let notification = {}
       if (err.response.status === 400) {
         notification = {
-          msg: 'Invalid or null fields',
+          message: 'Invalid or null fields',
           options: { variant: 'error' }
         }
       }
-      dispatch({ type: ENQUEUE_SNACKBAR, payload: notification })
+      store.dispatch(enqueueSnackbar(notification))
     })
 }
 
@@ -80,8 +82,10 @@ export const updateLead = (lead) => dispatch => {
       let notification = {}
       if (err.response.status === 400) {
         notification = {
-          msg: 'Invalid or null fields',
-          options: { variant: 'error' }
+          message: 'Invalid or null fields',
+          options: {
+            variant: 'error'
+          }
         }
       }
       dispatch({ type: ENQUEUE_SNACKBAR, payload: notification })

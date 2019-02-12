@@ -7,13 +7,17 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case ENQUEUE_SNACKBAR:
-      console.log(action.payload);
       return {
-        notifications: [...state.notifications, action.payload.notification]
+        ...state,
+        notifications: [
+          ...state.notifications,
+          { ...action.payload }
+        ]
       }
 
     case REMOVE_SNACKBAR:
       return {
+        ...state,
         notifications: state.notifications.filter(
           notification => notification.key !== action.payload
         )

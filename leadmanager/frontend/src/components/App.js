@@ -24,39 +24,29 @@ class App extends Component {
   render () {
     const { classes } = this.props
     return (
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Fragment>
-            <Header />
-            <Snackbar />
-            <Grid container className={classes.container}>
-              <Dashboard />
-            </Grid>
-          </Fragment>
-        </Provider>
-      </MuiThemeProvider>
+      <Fragment>
+        <Snackbar />
+        <Header />
+        <Grid container className={classes.container}>
+          <Dashboard />
+        </Grid>
+      </Fragment>
     )
   }
 }
 
-App.propTypes = {
-  enqueueSnackbar: PropTypes.func.isRequired,
-};
-
-
-
-const MyApp = withSnackbar(withStyles(styles)((withTheme(theme)(App))))
+const MyApp = withStyles(styles)((withTheme(theme)(withSnackbar(App))))
 
 function integrationNotistack () {
   return (
     <SnackbarProvider
-      maxSnack={3}
-      iconVariant={{
-        success: 'XXX',
-        error: '☹️'
-      }}>
-      {<MyApp />}
-    </SnackbarProvider>
+      maxSnack={3}>
+      <MuiThemeProvider theme={theme}>
+        <Provider store={store}>
+          {< MyApp />}
+        </Provider>
+      </MuiThemeProvider>
+    </SnackbarProvider >
   )
 }
 

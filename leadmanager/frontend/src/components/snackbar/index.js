@@ -1,20 +1,7 @@
-import React, { Component, Fragment } from 'react'
-import Snackbar from '@material-ui/core/Snackbar'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
 import { removeSnackbar, enqueueSnackbar } from '../../actions/notifications';
-
-const Snack = (props) => (<Snackbar
-  variant='error'
-  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-  open={props.open}
-  onClose={props.handleClose}
-  autoHideDuration={3000}
-  ContentProps={{
-    'aria-describedby': 'message-id'
-  }}
-  message={<span>{props.message}</span>}
-/>)
+import { bindActionCreators } from 'redux';
 
 class Alerts extends Component {
 
@@ -31,15 +18,26 @@ class Alerts extends Component {
 
   handleClose = (item) => () => {
     const errors = { ...this.props.errors }
-    delete errors.msg[item]
+    delete errors.message[item]
     this.props.removeSnackbar(errors)
+  }
+
+  shouldComponentUpdate ({ notifications: newSnacks = [] }) {
+    const { notifications: currentSnacks } = this.props;
+    let notExists = false;
+    for (let i = 0; i < newSnacks.length; i += 1) {
+      if (notExists) continue;
+      notExists = notExists || !currentSnacks.filter(({ key }) => newSnacks[i].key === key).length;
+    }
+    return notExists;
   }
 
   componentDidUpdate () {
     const { notifications = [] } = this.props
+    console.log(notifications);
     notifications.forEach((notification) => {
       if (this.displayed.includes(notification.key)) return
-      this.props.enqueueSnackbar(notification.message, notification.options)
+      this.props.enqueueSnackbar(notification)
       this.storeDisplayed(notification.key)
       this.props.removeSnackbar(notification.key)
     })
@@ -51,11 +49,11 @@ class Alerts extends Component {
 }
 const mapStateToProps = state => ({
   notifications: state.notifications.notifications
-});
-
-const mapDispatchToProps = dispatch => ({
-  enqueueSnackbar: (message, options) => dispatch(enqueueSnackbar(message, options)),
-  removeSnackbar: (key) => dispatch(removeSnackbar(key))
 })
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  enqueueSnackbar,
+  removeSnackbar
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Alerts)
