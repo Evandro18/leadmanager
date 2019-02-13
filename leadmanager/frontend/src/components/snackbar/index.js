@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { removeSnackbar, enqueueSnackbar } from '../../actions/notifications';
+import { withSnackbar } from 'notistack'
 import { bindActionCreators } from 'redux';
 
 class Alerts extends Component {
@@ -34,10 +35,9 @@ class Alerts extends Component {
 
   componentDidUpdate () {
     const { notifications = [] } = this.props
-    console.log(notifications);
     notifications.forEach((notification) => {
       if (this.displayed.includes(notification.key)) return
-      this.props.enqueueSnackbar(notification)
+      this.props.enqueueSnackbar(notification.message, notification.options)
       this.storeDisplayed(notification.key)
       this.props.removeSnackbar(notification.key)
     })
@@ -56,4 +56,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   removeSnackbar
 }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(Alerts)
+export default connect(mapStateToProps, mapDispatchToProps)(withSnackbar(Alerts))

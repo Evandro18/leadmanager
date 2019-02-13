@@ -6,11 +6,10 @@ import { MuiThemeProvider } from '@material-ui/core'
 import Header from './layout/Header'
 import { theme } from './layout/theme';
 import Snackbar from './snackbar';
-import { SnackbarProvider, withSnackbar } from 'notistack'
+import { SnackbarProvider } from 'notistack'
 import Dashboard from './leads/Dashboard'
 import { Provider } from 'react-redux'
 import store from '../store'
-import PropTypes from 'prop-types';
 
 const styles = {
   container: {
@@ -35,18 +34,17 @@ class App extends Component {
   }
 }
 
-const MyApp = withStyles(styles)((withTheme(theme)(withSnackbar(App))))
+const MyApp = withStyles(styles)((withTheme(theme)(App)))
 
 function integrationNotistack () {
   return (
-    <SnackbarProvider
-      maxSnack={3}>
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <SnackbarProvider>
           {< MyApp />}
-        </Provider>
-      </MuiThemeProvider>
-    </SnackbarProvider >
+        </SnackbarProvider >
+      </Provider>
+    </MuiThemeProvider >
   )
 }
 

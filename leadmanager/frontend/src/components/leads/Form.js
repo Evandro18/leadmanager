@@ -33,21 +33,28 @@ class Form extends Component {
 
   onChange = (field) => ({ target }) => {
     const { lead } = this.props
+    console.log(lead)
     const updated = {
       ...lead,
       [field]: target.value
     }
+    console.log(updated)
     this.props.setEditLead(updated)
   }
 
   submit = () => {
-    const { id = -1, name, email, message, created_at } = this.props.lead
-    if (id > -1) {
+    const { id = null, name = '', email = '', message = '', created_at } = this.props.lead
+    if (id) {
+      console.log('Update: ', id)
       this.props.updateLead({ id, name, email, message, created_at })
     } else {
       this.props.createLead({ name, email, message })
     }
-    this.props.setEditLead({ name: '', email: '', message: '', created_at: '' })
+
+    if (this.props.leads.filter((lead) => lead.email === email).length > 0) {
+      this.props.setEditLead({ id, name: '', email: '', message: '', created_at: '' })
+      this.props.showForm()
+    }
   }
 
   render () {
@@ -77,9 +84,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  createLead: ({ name, email, message }) => dispatch(createLead({ name, email, message })),
-  updateLead: ({ id, name, email, message, created_at }) => dispatch(updateLead({ id, name, email, message, created_at })),
-  setEditLead: ({ name, email, message, created_at }) => dispatch(setEditLead({ name, email, message, created_at })),
+  createLead: async ({ name, email, message }) => dispatch(createLead({ name, email, message })),
+  updateLead: async ({ id, name, email, message, created_at }) => dispatch(updateLead({ id, name, email, message, created_at })),
+  setEditLead: ({ id, name, email, message, created_at }) => dispatch(setEditLead({ id, name, email, message, created_at })),
   enqueueSnackbar: ({ ...notification }) => dispatch(enqueueSnackbar({ ...notification }))
 })
 

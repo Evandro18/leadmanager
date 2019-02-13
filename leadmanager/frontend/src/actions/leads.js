@@ -15,49 +15,53 @@ export const getLeads = () => dispatch => {
         msg: err.response.data,
         status: err.response.status
       }
-      dispatch({
-        type: ENQUEUE_SNACKBAR,
-        payload: errors
-      })
+      store.dispatch(enqueueSnackbar({ message: 'Failed to list data', options: { variant: 'success' } }))
     })
 }
 
 //DELETE LEADS
 export const deleteLeads = (id) => dispatch => {
   return LeadsApi.deleteLeads(id)
-    .then(res =>
+    .then(res => {
       dispatch({
         type: DELETE_LEADS,
         payload: { id }
       })
+      store.dispatch(enqueueSnackbar({ message: 'Removed with success', options: { variant: 'success' } }))
+    }
     )
     .catch(err => {
-      const errors = {
-        msg: err.response.data,
-        status: err.response.status
+      let notification = {}
+      if (err.response.status === 400) {
+        notification = {
+          message: 'Invalid or null fields.',
+          options: {
+            variant: "error"
+          }
+        }
       }
-      dispatch({
-        type: ENQUEUE_SNACKBAR,
-        payload: errors
-      })
+      store.dispatch(enqueueSnackbar(notification))
     })
 }
 
 //CREATE LEADS
 export const createLead = (lead) => dispatch => {
   return LeadsApi.createLead(lead)
-    .then(res =>
+    .then(res => {
       dispatch({
         type: CREATE_LEADS,
         payload: lead
       })
-    )
+      store.dispatch(enqueueSnackbar({ message: 'Created with success', options: { variant: 'success' } }))
+    })
     .catch(err => {
       let notification = {}
       if (err.response.status === 400) {
         notification = {
-          message: 'Invalid or null fields',
-          options: { variant: 'error' }
+          message: 'Failed to create: invalid or null fields.',
+          options: {
+            variant: "error"
+          }
         }
       }
       store.dispatch(enqueueSnackbar(notification))
@@ -77,12 +81,13 @@ export const updateLead = (lead) => dispatch => {
   return LeadsApi.updateLead(lead)
     .then(res => {
       dispatch({ type: UPDATE_LEAD, payload: res.data })
+      store.dispatch(enqueueSnackbar({ message: 'Updated with success', options: { variant: 'success' } }))
     })
     .catch(err => {
       let notification = {}
       if (err.response.status === 400) {
         notification = {
-          message: 'Invalid or null fields',
+          message: 'Failed to update: invalid or null fields',
           options: {
             variant: 'error'
           }
