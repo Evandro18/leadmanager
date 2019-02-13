@@ -5,3 +5,5 @@ export const SET_EDIT_LEAD = 'SET_EDIT_LEAD';
 export const UPDATE_LEAD = 'UPDATE_LEAD';
 export const ENQUEUE_SNACKBAR = 'ENQUEUE_SNACKBAR';
 export const REMOVE_SNACKBAR = 'REMOVE_SNACKBAR';
+export const GET_ERRORS = 'GET_ERRORS';
+export const CREATE_MESSAGE = 'CREATE_MESSAGE'

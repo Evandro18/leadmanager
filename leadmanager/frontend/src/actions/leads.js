@@ -1,4 +1,4 @@
-import { GET_LEADS, DELETE_LEADS, CREATE_LEADS, SET_EDIT_LEAD, UPDATE_LEAD, ENQUEUE_SNACKBAR } from './types'
+import { GET_LEADS, DELETE_LEADS, CREATE_LEADS, SET_EDIT_LEAD, UPDATE_LEAD, ENQUEUE_SNACKBAR, CREATE_MESSAGE, GET_ERRORS } from './types'
 import LeadsApi from '../apis/leads'
 import store from '../store'
 import { enqueueSnackbar } from './notifications';
@@ -15,7 +15,7 @@ export const getLeads = () => dispatch => {
         msg: err.response.data,
         status: err.response.status
       }
-      store.dispatch(enqueueSnackbar({ message: 'Failed to list data', options: { variant: 'success' } }))
+      store.dispatch(enqueueSnackbar({ message: 'Failed to list data', options: { variant: 'error' } }))
     })
 }
 
