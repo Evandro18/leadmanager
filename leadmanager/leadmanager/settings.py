@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATIONS_CLASSES': ('knox.auth.TokenAuthentication')
+    'DEFAULT_AUTHENTICATIONS_CLASSES': ('knox.auth.TokenAuthentication',)
 }
 
 MIDDLEWARE = [
