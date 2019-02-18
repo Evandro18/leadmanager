@@ -7,10 +7,16 @@ import Header from './layout/Header'
 import { theme } from './layout/theme';
 import Snackbar from './snackbar';
 import { SnackbarProvider } from 'notistack'
-import Dashboard from './leads/Dashboard'
 import { Provider } from 'react-redux'
 import store from '../store'
+import RouterHandler from '../routes'
+import { HashRouter as Router, Route } from 'react-router-dom'
+import Dashboard from '../components/leads/Dashboard'
 
+export const routes = [
+  <Route exact path='/' component={Dashboard}></Route>,
+  <Route exact path='/test' component={() => <Fragment></Fragment>}></Route>
+]
 const styles = {
   container: {
     padding: '2%',
@@ -25,10 +31,14 @@ class App extends Component {
     return (
       <Fragment>
         <Snackbar />
-        <Header />
-        <Grid container className={classes.container}>
-          <Dashboard />
-        </Grid>
+        <Router>
+          <Fragment>
+            <Header />
+            <Grid container className={classes.container}>
+              <RouterHandler routes={routes} />
+            </Grid>
+          </Fragment>
+        </Router>
       </Fragment>
     )
   }
